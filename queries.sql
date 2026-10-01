@@ -1,10 +1,10 @@
 -- ============================================================
--- YRBSS Physical Activity Analizi - SQL Sorguları
--- Veri kaynağı: CDC Nutrition, Physical Activity, and Obesity - YRBSS
+-- YRBSS Physical Activity Analysis - SQL Queries
+-- Data source: CDC Nutrition, Physical Activity, and Obesity - YRBSS
 -- ============================================================
 
--- 1) Ulusal düzeyde, cinsiyete göre, yıllara göre trend
---    "Günde 1 saat veya daha fazla orta/yüksek şiddetli fiziksel aktivite"
+-- 1) National-level trend by sex, by year
+--    "1+ hour of moderate/vigorous physical activity daily"
 SELECT
     YearStart,
     Sex,
@@ -16,8 +16,8 @@ WHERE LocationDesc = 'National'
 ORDER BY YearStart, Sex;
 
 
--- 2) Ulusal düzeyde, cinsiyete göre, yıllara göre trend
---    "Her gün beden eğitimi dersine katılım"
+-- 2) National-level trend by sex, by year
+--    "Daily physical education class participation"
 SELECT
     YearStart,
     Sex,
@@ -29,8 +29,8 @@ WHERE LocationDesc = 'National'
 ORDER BY YearStart, Sex;
 
 
--- 3) 2013 -> 2023 arasında en büyük düşüşü gösteren eyaletler
---    (window function: LAG ile önceki yılın karşılaştırılması)
+-- 3) States with the largest decline between 2013 and 2023
+--    (window function: LAG for year-over-year comparison)
 WITH state_trend AS (
     SELECT
         LocationDesc,
@@ -63,7 +63,7 @@ ORDER BY Change ASC
 LIMIT 10;
 
 
--- 4) Cinsiyetler arasındaki fark (gender gap) yıllara göre nasıl değişmiş?
+-- 4) How has the gender gap changed over the years?
 SELECT
     YearStart,
     MAX(CASE WHEN Sex = 'Male' THEN Data_Value END) AS Male_Pct,
